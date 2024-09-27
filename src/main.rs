@@ -119,6 +119,21 @@ impl DFA {
         print!("}}");
     }
 
+    // Imprime las transiciones del autómata
+    fn print_transitions(&self) {
+        for state in &self.states {
+            let state_borrow = state.borrow();
+            for (symbol, next_state) in &state_borrow.transitions {
+                println!(
+                    "δ({}, {}) = {}",
+                    state_borrow.state,
+                    symbol,
+                    next_state.borrow().state
+                );
+            }
+        }
+    }
+
     // Imprime la 5-tupla (Definición formal de un DFA)
     fn tupla(&self) {
         print!("A = <");
@@ -383,7 +398,8 @@ fn menu() {
         println!("5. Imprimir el estado inicial.");
         println!("6. Imprimir los conjuntos de aceptación.");
         println!("7. Imprimir las 5-tupla.");
-        println!("8. Salir del programa.\n");
+        println!("8. Imprimir las transiciones.");
+        println!("9. Salir del programa.\n");
 
         let mut choice = String::new();
         std::io::stdin().read_line(&mut choice).unwrap();
@@ -428,7 +444,11 @@ fn menu() {
                 println!("Conjuntos de aceptación:");
                 dfa.tupla();
             }
-            "8" => break,
+            "8" => {
+                println!("Transiciones:");
+                dfa.print_transitions();
+            }
+            "9" => break,
             _ => println!("Opción no válida, intente de nuevo."),
         }
     }
